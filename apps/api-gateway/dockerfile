@@ -1,0 +1,12 @@
+FROM node:18.14.2
+
+WORKDIR /usr/src/app
+
+RUN npm install -g @nest/cli
+
+COPY package*.json ./
+
+COPY . .
+
+CMD npm install && \
+    nest start --watch
