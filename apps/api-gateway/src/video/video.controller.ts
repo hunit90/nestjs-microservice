@@ -1,21 +1,31 @@
 import {
   Body,
-  Controller, Get,
-  HttpStatus, Param,
+  Controller,
+  Get,
+  HttpStatus,
+  Param,
   ParseFilePipeBuilder,
-  Post, StreamableFile,
+  Post,
+  Res,
+  StreamableFile,
   UploadedFile,
-  UseInterceptors
+  UseInterceptors,
 } from '@nestjs/common';
-import { VideoService } from './video.service';
-import { ApiBearerAuth, ApiConsumes, ApiExtraModels, ApiTags } from '@nestjs/swagger';
+import { FileInterceptor } from '@nestjs/platform-express';
+import {
+  ApiBearerAuth,
+  ApiConsumes,
+  ApiExtraModels,
+  ApiTags,
+} from '@nestjs/swagger';
+import { Response } from 'express';
+import { User, UserAfterAuth } from '../common/decorator/user.decorator';
 import { CreateVideoReqDto, FindVideoReqDto } from './dto/req.dto';
 import { CreateVideoResDto, FindVideoResDto } from './dto/res.dto';
+import { VideoService } from './video.service';
 import { PageReqDto } from '../common/dto/req.dto';
 import { PageResDto } from '../common/dto/res.dto';
 import { ApiPostResponse } from '../common/decorator/swagger.decorator';
-import { FileInterceptor } from '@nestjs/platform-express';
-import { User, UserAfterAuth } from '../common/decorator/user.decorator';
 
 @ApiTags('Video')
 @ApiExtraModels(
@@ -27,7 +37,7 @@ import { User, UserAfterAuth } from '../common/decorator/user.decorator';
 )
 @Controller('api/videos')
 export class VideoController {
-  constructor(private readonly videoService: VideoService) {}
+  constructor(private videoService: VideoService) {}
 
   @ApiBearerAuth()
   @ApiConsumes('multipart/form-data')
@@ -54,7 +64,7 @@ export class VideoController {
     const { mimetype, originalname, buffer } = file;
     const extension = originalname.split('.')[1];
     const { title } = createVideoReqDto;
-    const { id }  = await this.videoService.upload(
+    const { id } = await this.videoService.upload(
       user.id,
       title,
       mimetype,
