@@ -1,10 +1,10 @@
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
-import { InjectRepository } from '@nestjs/typeorm';
 import { Video } from './entity/video.entity';
 import { join } from 'path';
 import { readFile, stat, writeFile } from 'fs/promises';
+import { InjectRepository } from '@nestjs/typeorm';
 import { ClientProxy } from '@nestjs/microservices';
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 
 @Injectable()
 export class VideoService {
